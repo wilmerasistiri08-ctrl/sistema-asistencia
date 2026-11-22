@@ -8,7 +8,7 @@ use App\Models\Registro;
 
 class AsistenciaController extends Controller
 {
-    public function registrar(Request $request)
+        public function registrar(Request $request)
     {
         // 1. Validar que el ESP32 envíe los datos necesarios
         $request->validate([
@@ -29,10 +29,12 @@ class AsistenciaController extends Controller
                 'tipo' => $tipo,
             ]);
 
+            // Mantenemos el formato: ESTADO|MENSAJE
             return response("ACCESO_PERMITIDO|" . $usuario->nombre, 200)
                 ->header('Content-Type', 'text/plain');
         } else {
-            return response("ACCESO_DENEGADO", 200)
+            // Cambio FC-RFID-001: Mantenemos el estado para el ESP32 y agregamos el mensaje para el usuario
+            return response("ACCESO_DENEGADO|Tarjeta no registrada, acérquese a administración", 200)
                 ->header('Content-Type', 'text/plain');
         }
     }

@@ -48,19 +48,46 @@
                     <input type="email" name="email" value="{{ old('email') }}" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl pl-11 pr-4 py-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition" placeholder="admin@admin.com" required autofocus>
                 </div>
             </div>
+
+            <!-- CAMPO CONTRASEÑA CON OJITO -->
             <div class="mb-8">
                 <label class="block text-sm font-semibold text-slate-400 mb-2">Contraseña</label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                         <i class="fa-solid fa-lock text-slate-500"></i>
                     </div>
-                    <input type="password" name="password" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl pl-11 pr-4 py-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition" placeholder="••••••••" required>
+                    <input type="password" name="password" id="password" class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl pl-11 pr-12 py-3 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition" placeholder="••••••••" required>
+                    
+                    <!-- Botón ojito -->
+                    <button type="button" onclick="togglePassword()" 
+                            class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-emerald-400 transition"
+                            title="Mostrar/Ocultar contraseña">
+                        <i id="eyeIcon" class="fa-solid fa-eye"></i>
+                    </button>
                 </div>
             </div>
+
             <button type="submit" class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-bold py-3.5 rounded-xl transition shadow-lg shadow-emerald-900/50 flex justify-center items-center gap-2">
                 <i class="fa-solid fa-right-to-bracket"></i> Iniciar Sesión
             </button>
         </form>
     </div>
+
+    <!-- Script para mostrar/ocultar contraseña -->
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
 </body>
 </html>

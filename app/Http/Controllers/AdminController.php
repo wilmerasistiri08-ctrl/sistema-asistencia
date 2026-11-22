@@ -19,12 +19,23 @@ class AdminController extends Controller
     }
 
     // 2. Mostrar formulario y lista de usuarios
-    public function usuarios()
+       // 2. Mostrar formulario y lista de usuarios (CON BÚSQUEDA)
+    public function usuarios(Request $request)
     {
-        $usuarios = Usuario::orderBy('nombre', 'asc')->get();
-        return view('admin.usuarios', compact('usuarios'));
-    }
+        $buscar = $request->input('buscar');
 
+        // Si hay búsqueda, filtramos por nombre o UID
+        $usuarios = Usuario::when($buscar, function ($query, $buscar) {
+            return $query->where(function($q) use ($buscar) {
+                $q->where('nombre', 'like', "%{$buscar}%")
+                  ->orWhere('uid', 'like', "%{$buscar}%");
+            });
+        })
+        ->orderBy('nombre', 'asc')
+        ->get();
+
+        return view('admin.usuarios', compact('usuarios', 'buscar'));
+    }
     // 3. Guardar un nuevo usuario
     public function crearUsuario(Request $request)
     {

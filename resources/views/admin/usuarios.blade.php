@@ -33,10 +33,35 @@
     <!-- Tabla de Usuarios -->
     <div class="lg:col-span-2">
         <div class="glass-card overflow-hidden">
-            <div class="p-6 border-b border-slate-700/50 flex justify-between items-center bg-slate-800/30">
-                <h2 class="text-xl font-bold text-white">Usuarios en el Sistema</h2>
-                <span class="bg-emerald-900/50 text-emerald-400 text-sm font-bold px-4 py-1.5 rounded-full border border-emerald-800">{{ count($usuarios) }} Total</span>
+            
+            <!-- Encabezado con Título y Buscador -->
+            <div class="p-6 border-b border-slate-700/50 bg-slate-800/30">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+                    <h2 class="text-xl font-bold text-white">Usuarios en el Sistema</h2>
+                    <span class="bg-emerald-900/50 text-emerald-400 text-sm font-bold px-4 py-1.5 rounded-full border border-emerald-800">{{ count($usuarios) }} Total</span>
+                </div>
+                
+                <!-- BARRA DE BÚSQUEDA -->
+                <form method="GET" action="{{ route('admin.usuarios') }}" class="flex w-full gap-2">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-search text-slate-500"></i>
+                        </div>
+                        <input type="text" name="buscar" value="{{ $buscar ?? '' }}" 
+                               class="w-full bg-slate-900 text-white border border-slate-700 rounded-xl pl-10 pr-4 py-2 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none transition text-sm" 
+                               placeholder="Buscar por nombre o UID...">
+                    </div>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-xl transition text-sm font-semibold">
+                        Buscar
+                    </button>
+                    @if(isset($buscar) && $buscar != '')
+                        <a href="{{ route('admin.usuarios') }}" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-xl transition flex items-center justify-center" title="Limpiar búsqueda">
+                            <i class="fa-solid fa-times"></i>
+                        </a>
+                    @endif
+                </form>
             </div>
+
             <table class="w-full text-left text-sm">
                 <thead class="bg-slate-800/50 text-slate-400 border-b border-slate-700">
                     <tr>
@@ -47,7 +72,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-700/50 bg-slate-800/20">
-                    @foreach($usuarios as $user)
+                    @forelse($usuarios as $user)
                     <tr class="hover:bg-slate-800/60 transition">
                         <td class="py-4 px-6 font-mono text-emerald-400 font-bold">{{ $user->uid }}</td>
                         <td class="py-4 px-6 font-semibold text-slate-200">{{ $user->nombre }}</td>
@@ -70,7 +95,14 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="4" class="py-8 text-center text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass mb-2 text-2xl opacity-50"></i>
+                            <p>No se encontraron usuarios con ese nombre o UID.</p>
+                        </td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
